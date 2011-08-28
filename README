@@ -1,3 +1,4 @@
 Putting various scripts etc used for the Hesperian foundation in one place.
 
-1) image_processing: process images to take a white background to alpha
+* image_processing: process images to take a white background to alpha
+* log_parse: various log parsing / text processing type utilities
