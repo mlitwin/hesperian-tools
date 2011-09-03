@@ -1,0 +1,11 @@
+A collection of image processing scripts used (mostly) for the Hesperian Wiki.
+
+convert_image.sh - converts .png images in a source directory to transparent background images in a dest directory.
+
+process_images.sh - find images (by default in the pool wiki image directories) and feed them to image_convert.sh q.v.
+
+image_convert.sh - worker script for process_images.sh, args are
+	command destdir sourcefile
+	commands are:
+		transparent - make a grey on white image grey on transparent 
+		resize - normalize the image size to shrink high-res images
