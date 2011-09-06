@@ -1,6 +1,7 @@
 A collection of image processing scripts used (mostly) for the Hesperian Wiki.
 
-convert_image.sh - converts .png images in a source directory to transparent background images in a dest directory.
+tawnia/ Scripts for Tawnia
+	convert_image.sh - converts .png images in a source directory to transparent background images in a dest directory.
 
 process_images.sh - find images (by default in the pool wiki image directories) and feed them to image_convert.sh q.v.
 
