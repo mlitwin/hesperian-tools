@@ -18,7 +18,7 @@ GetOptions("resizeSize:s", \$resizeSize,
   "degrayAlpha:s", \$degrayAlpha,
   "wikidir", \$wikidir);
 
-$resizeSize = $resizeSize || '800x800>';
+$resizeSize = $resizeSize || '1000x1000>';
 $degrayAlpha = $degrayAlpha || '.09';
 
 my ($Command, $Source, $Dest) = @ARGV;
