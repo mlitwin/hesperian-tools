@@ -1,4 +1,7 @@
 #!/usr/bin/perl -w
+# Wrapper for various ImageMagick convert functions. 
+# "perldoc image_convert.pl" for the details.
+
 use strict;
 use Getopt::Long;
 
@@ -65,3 +68,54 @@ if (-d $Source) {
 } else {
   do_command($Source,$Dest);
 }
+
+
+=head1 NAME
+
+image_convert.pl - wrapper for various ImageMagick convert manipulations.
+
+=head1 SYNOPSIS
+
+./image_convert.pl [--resizeSize=convertSize | --degrayAlpha=alpha] command source_file target_file
+
+./image_convert.pl [--wikidir] [--resizeSize=convertSize | --degrayAlpha=alpha] command source_directory target_directory
+
+=head1 DESCRIPTION 
+
+We'll wrap up various ImageMagick convert commands by name.
+
+In the first synopsis form, image_convert.pl transforms F<source_file> to F<target_file>. 
+
+In the second synopsis form, image_convert.pl recursively transforms the files under F<source_directory> into F<target_directory>, mirroring the hierarchy structure.
+Pass the --wikidir option to limit subdirectories to those designated for mediawiki images ('0'...'f').
+
+=head2 commands
+
+=over
+
+=item transparent
+
+Make the image transparent, based on the assumption that it's a black image composited over a white background.
+
+=item resize
+
+Reduce the image to a standard (maximum) size, preserving aspect ratio. Override the size with the --resizeSize=convertSize option.
+
+=item degray
+
+Make the image transparent, based on the assumption that it's a black image compositied over a full black with alpha background.
+Override the presumed background alpha with --degrayAlpha=alpha
+
+=back
+
+=head1 SEE ALSO
+
+ImageMagick L<http://www.imagemagick.org>
+
+=head1 AUTHOR
+
+Matthew Litwin <mlitwin@sonic.net>
+
+
+=cut
+
