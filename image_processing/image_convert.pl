@@ -62,6 +62,8 @@ sub do_one_image {
 };
 
 if (-d $Source) {  
+  $Source =~ s|/*$||; # remove trailing slashes
+
   my @ImageDirs = $wikidir ?  map { "$Source/$_"} qw(0 1 2 3 4 5 6 7 8 9 a b c d e f): ($Source);
 
   find({ wanted => \&do_one_image, no_chdir => 1 }, @ImageDirs);
