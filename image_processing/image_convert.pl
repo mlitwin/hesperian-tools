@@ -9,9 +9,10 @@ use File::Basename;
 use File::Path qw(make_path);
 use File::Find;
 
+$ENV{'PATH'} .= ':/usr/local/bin/';
 
 my $convert = "convert";
-
+ 
 my ($resizeSize, $degrayAlpha, $wikidir);
 
 GetOptions("resizeSize:s", \$resizeSize,
@@ -35,9 +36,13 @@ my %Converts = (
   'degray' => \@degray,
 );
 
-die "Unknown command $Command" unless exists($Converts{$Command});
-my @cmd_base = ($convert, @{$Converts{$Command}});
 
+my @cmd_base = ($convert);
+
+foreach my $cmd (split('\+', $Command)) {
+  die "Unknown command $Command" unless exists($Converts{$cmd});
+  push (@cmd_base, @{$Converts{$cmd}});
+}
 
 sub do_command {
   my ($i, $o) = @_;
@@ -71,6 +76,7 @@ if (-d $Source) {
   do_command($Source,$Dest);
 }
 
+0;
 
 =head1 NAME
 
@@ -78,13 +84,13 @@ image_convert.pl - wrapper for various ImageMagick convert manipulations.
 
 =head1 SYNOPSIS
 
-./image_convert.pl [--resizeSize=convertSize | --degrayAlpha=alpha] command source_file target_file
+./image_convert.pl [--resizeSize=convertSize | --degrayAlpha=alpha] command[+command]* source_file target_file
 
-./image_convert.pl [--wikidir] [--resizeSize=convertSize | --degrayAlpha=alpha] command source_directory target_directory
+./image_convert.pl [--wikidir] [--resizeSize=convertSize | --degrayAlpha=alpha] command[+command]* source_directory target_directory
 
 =head1 DESCRIPTION 
 
-We'll wrap up various ImageMagick convert commands by name.
+We'll wrap up various ImageMagick convert commands by name. Multiple commands can be requested by concatinating the command names with '+'.
 
 In the first synopsis form, image_convert.pl transforms F<source_file> to F<target_file>. 
 
