@@ -13,11 +13,12 @@ $ENV{'PATH'} .= ':/usr/local/bin/';
 
 my $convert = "convert";
  
-my ($resizeSize, $degrayAlpha, $wikidir);
+my ($resizeSize, $degrayAlpha, $wikidir, $format);
 
 GetOptions("resizeSize:s", \$resizeSize,
   "degrayAlpha:s", \$degrayAlpha,
-  "wikidir", \$wikidir);
+  "wikidir", \$wikidir,
+  "format:s", \$format);
 
 $resizeSize = $resizeSize || '1000x1000>';
 $degrayAlpha = $degrayAlpha || '.09';
@@ -66,6 +67,12 @@ sub do_one_image {
   return if $bn =~ /^\./;
 
   my $destpath = $Dest . substr $_, length($Source);
+
+  if( $format) {
+    $destpath =~ s/\.[^.]*//;
+    $destpath .= ".$format";
+  }
+
   do_command($_, $destpath);
 };
 
@@ -123,6 +130,16 @@ Trim / Auto-crop the image.
 
 =back
 
+=head2 General Options
+
+=over
+
+=item format
+--format=extension
+Output format, e.g. png
+
+=back
+
 =head1 SEE ALSO
 
 ImageMagick L<http://www.imagemagick.org>
@@ -130,7 +147,6 @@ ImageMagick L<http://www.imagemagick.org>
 =head1 AUTHOR
 
 Matthew Litwin <mlitwin@sonic.net>
-
 
 =cut
 
