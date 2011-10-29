@@ -30,10 +30,13 @@ my @resize =  (split(/ /, '-density 72 -resize'), $resizeSize);
 
 my @degray = split(/ /, "-matte -channel alpha -fx (a-1)/(1-$degrayAlpha)+1 -channel red -fx 0 -channel green -fx 0 -channel blue -fx 0");
 
+my @trim = ( '-trim');
+
 my %Converts = (
   'transparent' => \@transparent,
   'resize' => \@resize,
   'degray' => \@degray,
+  'trim' => \@trim,
 );
 
 
@@ -113,6 +116,10 @@ Reduce the image to a standard (maximum) size, preserving aspect ratio. Override
 
 Make the image transparent, based on the assumption that it's a black image compositied over a full black with alpha background.
 Override the presumed background alpha with --degrayAlpha=alpha
+
+=item trim
+
+Trim / Auto-crop the image.
 
 =back
 
