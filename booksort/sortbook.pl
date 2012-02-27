@@ -5,7 +5,9 @@ my $book_order = {
 'Where There Is No Doctor' => 1,
 'Where Women Have No Doctor' => 2,
 'A Community Guide to Environmental Health' => 3,
-'A Book for Midwives' => 4,
+'A Book for Midwives - New Ed.' => 4,
+'A Book for Midwives' => 4.3,
+'A Book for Midwives - First Ed.' => 4.7,
 'Where There Is No Dentist' => 5,
 'Helping Health Workers Learn' => 6,
 'Disabled Village Children' => 7,
@@ -17,10 +19,28 @@ my $book_order = {
 'Water for Life' => 13,
 };
 
-sub bookname_cmp {
-my ($book_a, $book_b) = @_;
+sub booknameOrder {
+  my $name = shift;
+  
+  if(!exists($book_order->{$name})) {
+   # warn "Unknow book '$name'";
+    return 0;
+  }
+  
+  return $book_order->{$name};
+}
 
-return $book_order{$book_a} <=> $book_order{$book_b};
+sub webNotesOrder {
+  my $note = shift;
+  
+  return 0 if $note eq '';
+  return 1 if $note eq 'In Progress';
+  return 2 if $note =~ /Out of Print/;
+  
+  #print "'$note'\n";
+  #warn "Unknown web note $note";
+  
+  return 0;
 }
 
 $csv = Text::CSV->new({binary => 1});              # create a new object
@@ -29,20 +49,52 @@ $csv = Text::CSV->new({binary => 1});              # create a new object
 
 while(<>) {
   $line = $_;
+  $line =~ s/\cK/ /g;
   $csv->parse($line);
   my @columns = $csv->fields();
   push @books, \@columns;
 }
 
 sub sortbook {
-  $ret = bookname_cmp($a->[1], $b->[1]);
-  return $ret if $ret;
+  my $ret;
+  
+  $ret = $a->[0] cmp $b->[0];
+  return $ret if $ret != 0;
+
+  $ret = webNotesOrder($a->[-1]) <=> webNotesOrder($b->[-1]);
+  return $ret if $ret != 0;
+  
+  $ret = booknameOrder($a->[1]) <=> booknameOrder($b->[1]);
+  return $ret if $ret != 0;
+  
   return 0;
 }
+
+foreach my $row (@books) {
+  @{$row}[1] =~ s/\s*$//;
+  @{$row}[1] =~ s/A Book of Midwives/A Book for Midwives/;
+  @{$row}[1] =~ s/A Book for Midwives - New Edition/A Book for Midwives - New Ed./i;
+  
+  @{$row}[1] =~ s/\sis\s/ Is /g;
+ 
+  @{$row}[1] =~ s/Water for LIfe/Water for Life/;
+  
+
+  @{$row}[-1] =~ s/\s*$//;
+  @{$row}[-1] =~ s/out of print/Out of Print/i;
+  @{$row}[-1] =~ s/in progress/In Progress/i;
+  @{$row}[-1] =~ s/inn progress/In Progress/i;
+  @{$row}[-1] =~ s/Out of Stock/Out of Print/i;
+ 
+  
+
+ }
 
 @sbooks = sort sortbook @books;
 
 foreach my $row (@sbooks) {
-  print join('|', @{$row}), "\n";
+$csv->combine (@{$row});
+print $csv->string(), "\n";
+#  print join('|', @{$row}), "\n";
 }
 
