@@ -92,9 +92,11 @@ foreach my $row (@books) {
 
 @sbooks = sort sortbook @books;
 
+my $CRLF = "\015\012";
+
 foreach my $row (@sbooks) {
 $csv->combine (@{$row});
-print $csv->string(), "\n";
+print $csv->string(), $CRLF;
 #  print join('|', @{$row}), "\n";
 }
 
