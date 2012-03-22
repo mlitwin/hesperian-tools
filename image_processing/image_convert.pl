@@ -31,7 +31,7 @@ my @resize =  (split(/ /, '-density 72 -resize'), $resizeSize);
 
 my @degray = split(/ /, "-matte -channel alpha -fx (a-1)/(1-$degrayAlpha)+1 -channel red -fx 0 -channel green -fx 0 -channel blue -fx 0");
 
-my @trim = ( '-trim');
+my @trim = ( '-trim', '+repage');
 
 my %Converts = (
   'transparent' => \@transparent,

@@ -2,3 +2,16 @@ Putting various scripts etc used for the Hesperian foundation in one place.
 
 * image_processing: process images to take a white background to alpha
 * log_parse: various log parsing / text processing type utilities
+
+Notes for Cygwin Users
+======================
+These scripts should be useable on windows via cygwin.
+* Follow the instructions here to download and install the basic cygwin system: http://www.cygwin.com/install.html
+* In addition to the basic install, you'll need additional packages available via the Setup.exe install program.
+** Perl - there's a whole toplevel package
+** imagemagick - the image conversion suite of utilities
+** git - to download the source here: 'git clone git@github.com:mlitwin/hesperian-tools.git'
+* After the install, you may need to rebase the install. Details at http://cygwin.wikia.com/wiki/Rebaseall
+** Close all cygwin terminals
+** navigate in (in the windows UI) to the 'ash' shell (e.g. at C:/cygwin/bin/ash) and click to launch the shell.
+** run '/bin/rebaseall'
