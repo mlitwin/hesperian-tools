@@ -2,6 +2,7 @@ Putting various scripts etc used for the Hesperian foundation in one place.
 
 * image_processing: process images to take a white background to alpha
 * log_parse: various log parsing / text processing type utilities
+* ebook: scripts for ebook processing and MOBI -> ePub conversion
 
 Notes for Cygwin Users
 ======================

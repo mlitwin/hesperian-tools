@@ -1,0 +1,9 @@
+Various ebook creation related scripts. Note some file paths are hard-coded,so be ready to hack a bit.
+
+playorder.pl: the ePub toc.nxc requires playOrder's be concecutive, which makes it a pain to make changes. This will reorder the playOrder's to match order in fle.
+
+ePub:
+	make-epub.sh: zip up a directory into an epub
+	epubcheck.sh: basic wrapper for epubcheck invokation
+	
+tools: third party tools
