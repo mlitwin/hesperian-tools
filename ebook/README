@@ -1,9 +1,16 @@
 Various ebook creation related scripts. Note some file paths are hard-coded,so be ready to hack a bit.
 
-playorder.pl: the ePub toc.nxc requires playOrder's be concecutive, which makes it a pain to make changes. This will reorder the playOrder's to match order in fle.
+playorder.pl: the ePub toc.nxc requires playOrder's be concecutive, which makes it a pain to make changes. This will reorder the playOrder's to match order in file.
 
 ePub:
 	make-epub.sh: zip up a directory into an epub
 	epubcheck.sh: basic wrapper for epubcheck invokation
+	
+Mobi2EPub: Scripts to convert mobi to epub. They are based on specific examples of such conversions - you'll need to hack it to match your exemplars.
+  convertbook.pl - main conversion script
+  mobi2epub.pl - worker script which does one html page
+  mobi2epub-ncx.pl - worker script for ncx file conversion
+  mobi2epub-opf.pl - worker script for opf file conversion
+  
 	
 tools: third party tools
