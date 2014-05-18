@@ -48,17 +48,28 @@ foreach my $cmd (split('\+', $Command)) {
   push (@cmd_base, @{$Converts{$cmd}});
 }
 
-sub do_command {
-  my ($i, $o) = @_;
-  my @cmd = (@cmd_base, $i, $o);
-  print join(' ',@cmd), "\n";
-
-  my $basedir = dirname($o);
-  make_path($basedir);
-
-  my $rc = system(@cmd);
+sub do_system {
+  my $rc = system(@_);
   if ($rc & 127) { die "convert terminated" }
   return $rc;
+}
+
+sub do_command {
+  my ($i, $o) = @_;
+  my $basedir = dirname($o);
+
+  # We need to work around bugs (at least I think they are bugs) in convert
+  # where grayscale pngs prevent the fx operator from understanding the existence of an alpha channel
+  # we move through tiff as a workaround.
+  my ($tmpsrc, $tmpdest) = ("tmpsrc.tiff", "tmpdest.tiff");
+
+  my @cmd = (@cmd_base, $tmpsrc, $tmpdest);
+  print join(' ',@cmd), "\n";
+  make_path($basedir);
+
+  do_system($convert, $i, "-matte", $tmpsrc);
+  do_system(@cmd);
+  do_system($convert, $tmpdest, $o);
 }
 
 sub do_one_image {
