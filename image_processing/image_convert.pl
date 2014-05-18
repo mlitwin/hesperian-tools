@@ -68,10 +68,10 @@ sub do_command {
   $tmpdest = mktemp("image_convertdestXXXXXXX") . ".tiff";
 
   my @cmd = (@cmd_base, $tmpsrc, $tmpdest);
-  print join(' ',@cmd), "\n";
+  print "$Command: $i -> $o\n";
   make_path($basedir);
 
-  do_system($convert, $i, "-matte", $tmpsrc);
+  do_system($convert, "-quiet", $i, "-matte", $tmpsrc);
   do_system(@cmd);
   do_system($convert, $tmpdest, $o);
   unlink( $tmpsrc);
