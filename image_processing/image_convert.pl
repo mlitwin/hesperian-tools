@@ -8,6 +8,7 @@ use Getopt::Long;
 use File::Basename;
 use File::Path qw(make_path);
 use File::Find;
+use File::Temp qw/ :mktemp  /;
 
 $ENV{'PATH'} .= ':/usr/local/bin/';
 
@@ -61,7 +62,10 @@ sub do_command {
   # We need to work around bugs (at least I think they are bugs) in convert
   # where grayscale pngs prevent the fx operator from understanding the existence of an alpha channel
   # we move through tiff as a workaround.
-  my ($tmpsrc, $tmpdest) = ("tmpsrc.tiff", "tmpdest.tiff");
+  my ($tmpsrc, $tmpdest);
+
+  $tmpsrc = mktemp("image_convertsrcXXXXXXX") . ".tiff";
+  $tmpdest = mktemp("image_convertdestXXXXXXX") . ".tiff";
 
   my @cmd = (@cmd_base, $tmpsrc, $tmpdest);
   print join(' ',@cmd), "\n";
@@ -70,6 +74,8 @@ sub do_command {
   do_system($convert, $i, "-matte", $tmpsrc);
   do_system(@cmd);
   do_system($convert, $tmpdest, $o);
+  unlink( $tmpsrc);
+  unlink( $tmpdest);
 }
 
 sub do_one_image {
