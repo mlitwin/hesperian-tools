@@ -13,6 +13,7 @@ use File::Temp qw/ :mktemp  /;
 $ENV{'PATH'} .= ':/usr/local/bin/';
 
 my $convert = "convert";
+my $optimize = "pngquant";
  
 my ($resizeSize, $degrayAlpha, $wikidir, $format);
 
@@ -41,12 +42,20 @@ my %Converts = (
   'trim' => \@trim,
 );
 
+my @OptimizeOptions =  ("--ext=.png",  "--force",  "--skip-if-larger",  "--");
+
+my $do_optimize;
+
 
 my @cmd_base = ($convert);
 
 foreach my $cmd (split('\+', $Command)) {
-  die "Unknown command $Command" unless exists($Converts{$cmd});
-  push (@cmd_base, @{$Converts{$cmd}});
+	if( $cmd eq 'optimize') {
+	  $do_optimize = 1;
+	} else {
+	  die "Unknown command $Command" unless exists($Converts{$cmd}) ;
+  	  push (@cmd_base, @{$Converts{$cmd}});
+	}
 }
 
 sub do_system {
@@ -76,6 +85,10 @@ sub do_command {
   do_system($convert, $tmpdest, $o);
   unlink( $tmpsrc);
   unlink( $tmpdest);
+  
+  if( $do_optimize) {
+  	 do_system($optimize, @OptimizeOptions, $o);
+  }  
 }
 
 sub do_one_image {
@@ -91,6 +104,7 @@ sub do_one_image {
   }
 
   do_command($_, $destpath);
+
 };
 
 if (-d $Source) {  
@@ -145,6 +159,10 @@ Override the presumed background alpha with --degrayAlpha=alpha
 
 Trim / Auto-crop the image.
 
+=item optimize
+
+Optimize the images. Using libquant (libqant.org), which much be installed. Only supports .png format.
+
 =back
 
 =head2 General Options
@@ -160,6 +178,7 @@ Output format, e.g. png
 =head1 SEE ALSO
 
 ImageMagick L<http://www.imagemagick.org>
+pngquant L<https://pngquant.org/>
 
 =head1 AUTHOR
 
